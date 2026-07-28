@@ -110,11 +110,6 @@ This project demonstrates several scalable backend engineering concepts.
 - Independent business logic organization
 - Improved maintainability
 
-## Saga Pattern
-
-- Multi-step appointment workflow
-- Distributed transaction management
-- Compensating actions on failure
 
 ## Outbox Pattern
 
