@@ -1,5 +1,6 @@
-import DocUser from "../models/user.js";
+import prisma from "../lib/prisma.js";
 import jwt from "jsonwebtoken";
+import { hashPassword, comparePassword } from "../utils/password.js";
 
 /* 🔒 ONE COOKIE CONFIG (USED EVERYWHERE) */
 const cookieOptions = {
@@ -32,8 +33,8 @@ export async function signup(req, res) {
         .json({ message: "Password must be at least 6 characters" });
     }
 
-    const existingUser = await DocUser.findOne({
-      email: email.toLowerCase(),
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
     });
 
     if (existingUser) {
@@ -43,17 +44,21 @@ export async function signup(req, res) {
     const idx = Math.floor(Math.random() * 100) + 1;
     const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
 
-    const newUser = await DocUser.create({
-      fullName,
-      email: email.toLowerCase(),
-      password,
-      profilePic: randomAvatar,
-      role,
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await prisma.user.create({
+      data: {
+        fullName,
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        profilePic: randomAvatar,
+        role,
+      },
     });
 
     const token = jwt.sign(
       {
-        userId: newUser._id,
+        userId: newUser.id,
         role: newUser.role,
       },
       process.env.JWT_SECRET_KEY,
@@ -62,8 +67,7 @@ export async function signup(req, res) {
 
     res.cookie("jwt", token, cookieOptions);
 
-    const userData = newUser.toObject();
-    delete userData.password;
+    const { password: _, ...userData } = newUser;
 
     res.status(201).json({
       success: true,
@@ -84,9 +88,9 @@ export async function login(req, res) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const user = await DocUser.findOne({
-      email: email.toLowerCase(),
-    }).select("+password");
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    });
 
     if (!user) {
       return res
@@ -98,7 +102,7 @@ export async function login(req, res) {
       return res.status(403).json({ message: "Account is blocked" });
     }
 
-    const isPasswordCorrect = await user.matchPassword(password);
+    const isPasswordCorrect = await comparePassword(password, user.password);
     if (!isPasswordCorrect) {
       return res
         .status(401)
@@ -107,7 +111,7 @@ export async function login(req, res) {
 
     const token = jwt.sign(
       {
-        userId: user._id,
+        userId: user.id,
         role: user.role,
       },
       process.env.JWT_SECRET_KEY,
@@ -119,7 +123,7 @@ export async function login(req, res) {
     res.status(200).json({
       success: true,
       user: {
-        _id: user._id,
+        id: user.id,
         fullName: user.fullName,
         email: user.email,
         role: user.role,

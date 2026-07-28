@@ -1,5 +1,7 @@
 import React from "react";
 import headers from "../assets/header_img.png";
+import { useNavigate } from "react-router-dom";
+
 import {
   Sparkles,
   ArrowRight,
@@ -11,21 +13,36 @@ import {
   Ear,
   Eye,
   Activity,
-  Hospital
+  Hospital,User,CalendarDays
 } from "lucide-react";
 
+
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (speciality) => {
+    navigate(`/doctors/${speciality}`);
+  };
+   const goToSpeciality = () => {
+    navigate("/speciality");
+  };
+
   const specialties = [
-    { name: "General Physician", color: "bg-blue-100", icon: <Stethoscope /> },
-    { name: "Gynecologist", color: "bg-pink-100", icon: <HeartPulse /> },
-    { name: "Dermatologist", color: "bg-purple-100", icon: <Eye /> },
-    { name: "Pediatrician", color: "bg-yellow-100", icon: <Baby /> },
-    { name: "Neurologist", color: "bg-indigo-100", icon: <Brain /> },
-    { name: "Gastroenterologist", color: "bg-green-100", icon: <Activity /> },
-    { name: "Cardiologist", color: "bg-red-100", icon: <HeartPulse /> },
-    { name: "Orthopedist", color: "bg-gray-200", icon: <Bone /> },
-    { name: "Psychiatrist", color: "bg-teal-100", icon: <Brain /> },
-    { name: "ENT Specialist", color: "bg-cyan-100", icon: <Ear /> },
+  { name: "General Physician", icon: <Stethoscope />, color: "from-blue-200 to-blue-100" },
+
+  { name: "Cardiologist", icon: <HeartPulse />, color: "from-red-200 to-red-100" },
+  { name: "Dermatologist", icon: <Eye />, color: "from-purple-200 to-purple-100" },
+  { name: "Pediatrician", icon: <Baby />, color: "from-yellow-200 to-yellow-100" },
+  { name: "Gynecologist", icon: <User />, color: "from-pink-200 to-pink-100" },
+
+  { name: "Neurologist", icon: <Brain />, color: "from-indigo-200 to-indigo-100" },
+  { name: "Psychiatrist", icon: <Brain />, color: "from-teal-200 to-teal-100" },
+
+  { name: "Orthopedist", icon: <Bone />, color: "from-amber-200 to-amber-100" },
+
+  { name: "ENT Specialist", icon: <Ear />, color: "from-cyan-200 to-cyan-100" },
+
+  { name: "Gastroenterologist", icon: <Activity />, color: "from-green-200 to-green-100" },
   ];
 
   return (
@@ -106,16 +123,19 @@ const Home = () => {
           {specialties.map((specialty, index) => (
             <div
               key={index}
-              className={`${specialty.color} bg-gradient-to-br from-white/40 to-transparent
-              rounded-2xl p-7 text-center cursor-pointer
-              border border-white hover:border-blue-200
-              shadow-md hover:shadow-2xl
-              transition-all duration-300
-              transform hover:-translate-y-2 group`}
+              onClick={() => handleClick(specialty.name)}
+               className={`bg-gradient-to-br ${specialty.color}
+        rounded-2xl p-7 text-center cursor-pointer
+        border border-white/60 hover:border-blue-200
+        shadow-md hover:shadow-2xl
+        transition-all duration-300
+        hover:-translate-y-2 group`}
             >
-              <div className="w-20 h-20 mx-auto mb-5 bg-white rounded-2xl
-                flex items-center justify-center shadow-lg
-                group-hover:scale-110 transition-all">
+              <div
+                className="w-20 h-20 mx-auto mb-5 bg-white rounded-2xl
+        flex items-center justify-center shadow-lg
+        group-hover:scale-110 transition-all"
+              >
                 {React.cloneElement(specialty.icon, {
                   size: 32,
                   strokeWidth: 2,
@@ -130,9 +150,13 @@ const Home = () => {
           ))}
         </div>
 
+
         {/* CTA */}
         <div className="text-center mt-16">
-          <button className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700">
+          <button
+            onClick={goToSpeciality}
+            className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700"
+          >
             View all specialties
             <ArrowRight size={18} />
           </button>
@@ -140,121 +164,115 @@ const Home = () => {
       </div>
 
       {/* FINAL CTA */}
-      <footer className="mt-20">
+      <footer className="mt-14">
 
         {/* ===== CTA SECTION ===== */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-600">
-          {/* Background pattern */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-600 rounded-2xl mx-4">
+
+          {/* Soft background accents */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-10 left-10 w-20 h-20 rounded-full border-2 border-white/30"></div>
-            <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full border-2 border-white/20"></div>
-            <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-full border border-white/15"></div>
+            <div className="absolute top-8 left-8 w-16 h-16 rounded-full border border-white/30" />
+            <div className="absolute bottom-8 right-8 w-24 h-24 rounded-full border border-white/20" />
           </div>
 
-          <div className="container relative mx-auto px-4 py-24 text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          <div className="relative mx-auto max-w-5xl px-6 py-16 text-center">
+
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-3 py-1.5 rounded-full mb-5">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4" />
               </svg>
-              <span className="text-white/90 text-sm font-medium">Trusted Healthcare Platform</span>
+              <span className="text-white/90 text-sm font-medium">
+                Trusted Healthcare Platform
+              </span>
             </div>
 
-            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            <h3 className="text-3xl md:text-4xl font-bold text-white leading-tight">
               Your Health Journey
-              <span className="block text-white/90 text-2xl md:text-3xl font-normal mt-2">
+              <span className="block text-white/90 text-xl md:text-2xl font-normal mt-1">
                 Starts Here
               </span>
             </h3>
 
-            <p className="text-blue-100/90 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-              Connect with expert doctors, schedule appointments seamlessly, and prioritize your wellness today.
+            <p className="text-blue-100/90 text-base md:text-lg max-w-xl mx-auto mt-4 mb-8">
+              Connect with expert doctors and book appointments effortlessly.
             </p>
 
             <button
-              className="group relative bg-white text-blue-700 px-12 py-5 rounded-full
-                 text-lg font-semibold shadow-2xl
-                 hover:shadow-3xl hover:scale-[1.02]
-                 transition-all duration-300 overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/30 to-transparent 
-                      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-              <span className="relative flex items-center justify-center gap-3">
-                Book Appointment Now
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-              </span>
-            </button>
+  onClick={() => navigate("/doctors/all")}
+  className="group relative inline-flex items-center gap-2
+  bg-white text-blue-700 px-8 py-4 rounded-full
+  font-semibold shadow-lg hover:scale-[1.03]
+  transition-all duration-300 overflow-hidden"
+>
+  {/* Shine animation */}
+  <span
+    className="absolute inset-0 bg-gradient-to-r
+    from-transparent via-blue-50/40 to-transparent
+    -translate-x-full group-hover:translate-x-full
+    transition-transform duration-700"
+  />
 
-            <p className="text-white/70 text-sm mt-8 flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-              </svg>
-              HIPAA Compliant • 100% Secure • Verified Doctors
+  {/* Content */}
+  <span className="relative flex items-center gap-3">
+    <CalendarDays size={18} />
+    Book Appointment
+    <ArrowRight
+      size={18}
+      className="group-hover:translate-x-1 transition-transform"
+    />
+  </span>
+</button>
+
+
+            <p className="text-white/70 text-xs mt-6 flex justify-center items-center gap-2">
+              ✓ HIPAA Compliant • Secure • Verified Doctors
             </p>
           </div>
         </div>
 
         {/* ===== MAIN FOOTER ===== */}
-        <div className="relative bg-gradient-to-b from-sky-50 to-white">
-          {/* Subtle pattern */}
-          <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_0.5px,transparent_0.5px)] bg-[length:20px_20px] opacity-[0.02]"></div>
+        <div className="relative mt-10 bg-white">
 
-          <div className="container relative mx-auto px-4 py-20">
+          <div className="max-w-6xl mx-auto px-6 py-14">
 
             {/* Bottom Bar */}
-            <div className="relative mt-16 pt-12 border-t border-blue-100/40
-                      flex flex-col sm:flex-row
-                      justify-between items-center gap-8
-                      text-gray-700">
+            <div className="pt-8 border-t border-blue-100/40
+                      flex flex-col sm:flex-row items-center justify-between gap-6">
 
-              {/* Copyright */}
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-blue-600/10 
-                        flex items-center justify-center border border-blue-100/50">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+              {/* Brand */}
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16" />
                   </svg>
                 </div>
+
                 <div>
-                  <p className="font-semibold text-gray-900 tracking-tight">
+                  <p className="font-semibold text-gray-900 text-sm">
                     © {new Date().getFullYear()} MediSlot
                   </p>
-                  <p className="text-gray-500/80 text-sm">
+                  <p className="text-gray-500 text-xs">
                     All rights reserved
                   </p>
                 </div>
               </div>
 
               {/* Links */}
-              <div className="flex items-center gap-8">
-                <span className="relative group">
-                  <span className="text-gray-600/90 hover:text-blue-700 
-                           cursor-pointer font-medium transition-colors duration-200
-                           px-1 py-0.5">
-                    Privacy Policy
+              <div className="flex items-center gap-6 text-sm font-medium">
+                {["Privacy Policy", "Terms of Service"].map((item) => (
+                  <span key={item} className="relative group cursor-pointer text-gray-600 hover:text-blue-700">
+                    {item}
+                    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-blue-500 group-hover:w-full transition-all duration-300 rounded-full" />
                   </span>
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 
-                           group-hover:w-full transition-all duration-300 rounded-full"></span>
-                </span>
-
-                <div className="w-px h-4 bg-gradient-to-b from-transparent via-blue-200 to-transparent"></div>
-
-                <span className="relative group">
-                  <span className="text-gray-600/90 hover:text-blue-700 
-                           cursor-pointer font-medium transition-colors duration-200
-                           px-1 py-0.5">
-                    Terms of Service
-                  </span>
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 
-                           group-hover:w-full transition-all duration-300 rounded-full"></span>
-                </span>
+                ))}
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
       </footer>
+
 
 
 

@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  patient
+  doctor
+  admin
+}
+
+enum WeekDay {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+
+enum AppointmentStatus {
+  pending_payment
+  booked
+  cancelled
+  completed
+  no_show
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+  NETBANKING
+  WALLET
+}
+
+model User {
+  id            String   @id @default(cuid())
+  fullName      String
+  email         String   @unique
+  password      String
+  role          Role     @default(patient)
+  profilePic    String   @default("")
+  location      String   @default("")
+  isOnboarded   Boolean  @default(false)
+  isBlocked     Boolean  @default(false)
+
+  doctor        Doctor?
+
+  appointments  Appointment[] @relation("PatientAppointments")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Doctor {
+  id                     String   @id @default(cuid())
+
+  userId                 String   @unique
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  specialization         String
+  experience             Int
+
+  hospital               String?
+  qualification          String?
+  phone                  String?
+
+  consultationFee        Float    @default(0)
+
+  workingDays            WeekDay[]
+
+  workingStart           Int      @default(9)
+  workingEnd             Int      @default(17)
+
+  appointmentsPerHour    Int      @default(6)
+
+  latitude               Float
+  longitude              Float
+  address                String
+  placeId                String?
+  city                   String?
+  state                  String?
+
+  profileImage           String?
+
+  rating                 Float    @default(0)
+  totalReviews           Int      @default(0)
+
+  isVerified             Boolean  @default(false)
+  isActive               Boolean  @default(true)
+
+  appointments           Appointment[] @relation("DoctorAppointments")
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Appointment {
+  id            String             @id @default(cuid())
+
+  doctorId      String
+  doctor        Doctor             @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+
+  patientId     String
+  patient       User               @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+
+  date          DateTime
+  hour          Int
+
+  tokenNumber   Int
+
+  status AppointmentStatus @default(pending_payment)
+
+  reason        String?
+
+  payment       Payment?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([doctorId, date, hour, tokenNumber])
+  @@index([doctorId, date, hour])
+}
+
+model MedicalStore {
+  id               String   @id @default(cuid())
+
+  name             String
+  ownerName        String
+
+  licenseNumber    String   @unique
+
+  phone            String
+  email            String?
+
+  latitude         Float
+  longitude        Float
+  address          String
+  placeId          String?
+  city             String?
+  state            String?
+
+  isVerified       Boolean  @default(false)
+
+  rating           Float    @default(0)
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model FailedJob {
+  id           String   @id @default(cuid())
+  jobId        String
+  queueName    String
+  jobName      String
+  payload      Json
+  failedReason String
+  createdAt    DateTime @default(now())
+
+  @@index([jobId])
+  @@index([createdAt])
+}
+
+model OutboxEvent {
+  id          String   @id @default(cuid())
+  eventType   String
+  payload     Json
+  processed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+
+  // Razorpay Order ID
+  orderId       String   @unique
+
+  // Razorpay Payment ID
+  paymentId     String?  @unique
+
+  amount        Int
+  currency      String   @default("INR")
+
+  status        PaymentStatus @default(PENDING)
+
+  signature     String?
+
+  method        PaymentMethod?
+
+  failureReason String?
+
+  patientId     String
+  doctorId      String
+
+  appointmentId String?       @unique
+  appointment   Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([status])
+}

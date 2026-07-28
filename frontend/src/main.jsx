@@ -7,6 +7,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DoctorProvider } from "./context/DoctorContext";
 
+import "leaflet/dist/leaflet.css";
+import "./services/leafletFix";
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

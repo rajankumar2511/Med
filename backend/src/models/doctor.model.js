@@ -66,6 +66,33 @@ const doctorSchema = new mongoose.Schema(
       min: 1,
       max: 20,
     },
+    // 📍 Clinic / Hospital Location
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+        validate: {
+          validator: (val) => val.length === 2,
+          message: "Coordinates must be [longitude, latitude]",
+        },
+      },
+
+      address: {
+        type: String,
+        required: true,
+      },
+      placeId: {
+        type: String, // Google Maps Place ID (optional but very useful)
+      },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+    },
+
 
     // 🖼️ Profile Image
     profileImage: String,
@@ -80,5 +107,6 @@ const doctorSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+doctorSchema.index({ location: "2dsphere" });
 
 export default mongoose.model("Doctor", doctorSchema);

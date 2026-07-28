@@ -21,6 +21,10 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Reset scroll & navbar size on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location.pathname]);
 
   // Scroll effect
   useEffect(() => {
@@ -38,23 +42,27 @@ const Navbar = () => {
     fetchUser();
   }, [location]);
 
+  const getHomePath = () => {
+    if (user?.role === "doctor") return "/doctor-dashboard";
+    return "/";
+  };
+
   const handleBookAppointment = () => {
     setMobileOpen(false);
-    if (user) navigate("/doctors");
+    if (user) navigate("/doctors/all");
     else navigate("/login", { state: { from: location.pathname } });
   };
 
   const linkStyle = ({ isActive }) =>
     `px-5 py-3 rounded-xl text-base font-medium transition-all duration-300 flex items-center gap-2
-     ${
-       isActive
-         ? "text-white bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg"
-         : "text-gray-800 hover:bg-blue-50 hover:text-blue-700"
-     }`;
+     ${isActive
+      ? "text-white bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg"
+      : "text-gray-800 hover:bg-blue-50 hover:text-blue-700"
+    }`;
 
   const navLinks = [
     { path: "/", label: "Home", icon: <Home size={20} /> },
-    { path: "/doctors", label: "Doctors", icon: <Stethoscope size={20} /> },
+    { path: "/doctors/all", label: "Doctors", icon: <Stethoscope size={20} /> },
     { path: "/services", label: "Services", icon: <Heart size={20} /> },
     { path: "/about", label: "About", icon: <Shield size={20} /> },
     { path: "/contact", label: "Contact", icon: <Phone size={20} /> },
@@ -64,27 +72,24 @@ const Navbar = () => {
     <>
       {/* Navbar */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-            : "bg-white py-4"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
+          : "bg-white py-4"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <NavLink to="/" className="flex items-center">
+            <NavLink to={getHomePath()} className="flex items-center">
               <img
                 src={logo}
                 alt="MediSlot Logo"
-                className={`rounded-xl object-contain transition-all duration-300 ${
-                  scrolled ? "h-12 w-12" : "h-14 w-14"
-                }`}
+                className={`rounded-xl object-contain transition-all duration-300 ${scrolled ? "h-12 w-12" : "h-14 w-14"
+                  }`}
               />
               <h1
-                className={`ml-3 font-bold text-blue-800 ${
-                  scrolled ? "text-xl" : "text-2xl"
-                }`}
+                className={`ml-3 font-bold text-blue-800 ${scrolled ? "text-xl" : "text-2xl"
+                  }`}
               >
                 MediSlot
               </h1>

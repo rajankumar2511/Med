@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../lib/api';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../lib/api";
 import { toast } from "react-toastify";
+import { Eye, EyeOff, User, Stethoscope, Lock } from "lucide-react";
+import bgImage from "../assets/bg.png";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    role: 'patient'
+    email: "",
+    password: "",
+    role: "patient",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const isPatient = formData.role === "patient";
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,169 +30,151 @@ const Login = () => {
 
     if (result.success) {
       const { token, user } = result.data;
-
       localStorage.setItem("token", token);
 
-      // 🚨 role must come from backend
-      if (user.role === "doctor") {
-        navigate("/doctor-dashboard");
-      } else {
-        navigate("/patient-dashboard");
-      }
+      if (user.role === "doctor") navigate("/doctor-dashboard");
+      else navigate("/patient-dashboard");
     } else {
       toast.error(result.message || "Invalid credentials");
     }
   };
 
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-block mb-4">
-            <h1 className="text-3xl font-bold text-gray-800">MediCare Connect</h1>
-          </Link>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back</h2>
-          <p className="text-gray-600">Sign in to your account</p>
-        </div>
+    <div
+      className="min-h-screen flex items-center justify-center px-4
+  bg-cover bg-center bg-no-repeat
+  transition-all duration-500"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+      }}
+    >      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
 
-        {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Role Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                I am logging in as:
-              </label>
-              <div className="flex gap-4">
-                <label className="flex-1">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="patient"
-                    checked={formData.role === 'patient'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <div className={`text-center p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.role === 'patient' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-200'}`}>
-                    <div className="text-lg mb-1">👤</div>
-                    <span className="font-medium">Patient</span>
-                  </div>
-                </label>
+        {/* Top Accent */}
+        <div className="h-2 bg-blue-600" />
 
-                <label className="flex-1">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="doctor"
-                    checked={formData.role === 'doctor'}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                  <div className={`text-center p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.role === 'doctor' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-green-200'}`}>
-                    <div className="text-lg mb-1">👨‍⚕️</div>
-                    <span className="font-medium">Doctor</span>
-                  </div>
-                </label>
-              </div>
+        <div className="p-8">
+
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="mx-auto mb-3 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white">
+              <Lock size={22} />
             </div>
+            <h1 className="text-4xl font-bold text-gray-800">
+              Welcome Back
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Log in to your account
+            </p>
+          </div>
 
-            {/* Email Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-700">
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
-            {/* Submit Button */}
+          {/* Role Switch (lighter than signup) */}
+          <div className="flex gap-2 mb-6">
             <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium shadow-md hover:shadow-lg transition-all"
+              type="button"
+              onClick={() => setFormData((p) => ({ ...p, role: "patient" }))}
+              className={`flex-1 h-12 rounded-lg text-lg font-medium
+flex items-center justify-center gap-2
+transition-all
+
+              ${isPatient
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+                }`}
             >
-              Sign In
+              <User size={16} />
+              Patient
             </button>
 
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setFormData((p) => ({ ...p, role: "doctor" }))}
+              className={`flex-1 h-12 rounded-lg text-lg font-medium
+flex items-center justify-center gap-2
+transition-all
 
-            {/* Social Login */}
-            <div className="flex gap-3">
+
+              ${!isPatient
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+                }`}
+            >
+              <Stethoscope size={16} />
+              Doctor
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 rounded-xl border
+              focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+            />
+
+            {/* Password with toggle */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 pr-12 rounded-xl border
+                focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              />
               <button
                 type="button"
-                className="flex-1 flex items-center justify-center gap-2 p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                onClick={() => setShowPassword((p) => !p)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-blue-600"
               >
-                <span className="text-lg">G</span>
-                <span>Google</span>
-              </button>
-              <button
-                type="button"
-                className="flex-1 flex items-center justify-center gap-2 p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-lg">f</span>
-                <span>Facebook</span>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
-            {/* Sign Up Link */}
-            <div className="text-center pt-4">
-              <p className="text-gray-600">
-                Don't have an account?{' '}
-                <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Sign up
-                </Link>
-              </p>
+            <div className="flex justify-end">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl font-semibold text-white
+              bg-blue-600 hover:opacity-90 transition-all"
+            >
+              Log In
+            </button>
           </form>
 
-          {/* Back to Home */}
-          <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-            <Link to="/" className="text-gray-600 hover:text-gray-800 inline-flex items-center gap-1">
-              <span>←</span>
-              Back to Home
+          {/* Footer */}
+          <p className="text-center text-sm text-gray-600 mt-6">
+            New to MediSlot?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Create an account
+            </Link>
+          </p>
+
+          <div className="text-center mt-5">
+            <Link
+              to="/"
+              className="text-gray-500 hover:text-gray-700 text-sm"
+            >
+              ← Back to Home
             </Link>
           </div>
         </div>
-
-        {/* Footer Note */}
-
       </div>
     </div>
   );
