@@ -1,203 +1,357 @@
-# 🏥 Medislot – Doctor Appointment Booking Platform
+# 🏥 MediSlot
 
-Medislot is a full-stack MERN-based web application that enables patients to book doctor appointments by selecting real-time available slots. It also provides doctors with tools to manage availability, appointments, and profiles, along with secure authentication and payment support using Razorpay.
+> A scalable healthcare appointment platform built with modern backend architecture, distributed systems principles, and asynchronous processing.
+
+![Node.js](https://img.shields.io/badge/Node.js-22+-green)
+![React](https://img.shields.io/badge/React-19-blue)
+![Express](https://img.shields.io/badge/Express.js-black)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-blue)
+![Redis](https://img.shields.io/badge/Redis-red)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+## Overview
+
+MediSlot is a full-stack healthcare appointment booking platform designed with production-oriented backend architecture. It enables patients to discover doctors, book appointments, complete secure payments, and receive automated notifications while demonstrating scalable backend engineering concepts such as CQRS, Saga Pattern, Redis caching, BullMQ workers, and asynchronous workflows.
+
+The project focuses on building reliable, maintainable, and scalable backend services rather than only implementing CRUD functionality.
 
 ---
 
-## 🚀 Key Features
+## Features
 
-### 👤 Patient Features
-- Secure user authentication (JWT-based)
+### Patient Portal
+
+- Secure user registration and authentication
 - Browse doctors by specialization
-- View real-time availability slots
-- Book appointments seamlessly
-- Online payment integration using Razorpay
+- Book appointments
+- Cancel appointments
 - View appointment history
-- Responsive UI
+- Secure online payment
+- AI-powered medical assistant
+- Nearby medical store locator
+- Responsive user interface
 
-### 👨‍⚕️ Doctor Features
-- Doctor signup & login
-- Role-based access control
-- Slot and availability management
-- View and manage booked appointments
-- Profile management dashboard
+### Doctor Portal
 
----
+- Secure doctor authentication
+- Manage profile
+- View appointments
+- Update availability
+- Appointment management
 
-## 🧠 Tech Stack
+### Platform Features
 
-### Frontend
-- **React.js** (Vite)
-- **Tailwind CSS**
-- **Axios** (API requests)
-- **React Context API** (state management)
-- **React Router DOM**
-
-### Backend
-- **Node.js**
-- **Express.js**
-- **JWT Authentication**
-- **Bcrypt** (password hashing)
-- **Middleware-based architecture**
-
-### Database
-- **MongoDB**
-- **Mongoose ODM**
-
-### Payments
-- **Razorpay Payment Gateway**
-  - Secure checkout
-  - Order creation from backend
-  - Payment verification using Razorpay signature
+- Appointment confirmation emails
+- Reminder email scheduling
+- Background job processing
+- Redis-powered caching
+- AI integration
+- Payment gateway integration
+- Secure authentication
+- Image upload support
 
 ---
 
-## 📁 Project Folder Structure
+# Tech Stack
+
+## Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Axios
+- React Router
+
+## Backend
+
+- Node.js
+- Express.js
+- Prisma ORM
+- PostgreSQL
+- Redis
+- BullMQ
+- JWT Authentication
+- Nodemailer
+- Cloudinary
+
+---
+
+# Architecture
 
 ```
-medislot/
-│
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   │   ├── appointment.controller.js
-│   │   │   ├── auth.controller.js
-│   │   │   └── doctor.controller.js
-│   │   │
-│   │   ├── lib/
-│   │   │   └── db.js
-│   │   │
-│   │   ├── middleware/
-│   │   │   ├── protect.js
-│   │   │   └── role.middleware.js
-│   │   │
-│   │   ├── models/
-│   │   │   ├── appointment.model.js
-│   │   │   ├── doctor.model.js
-│   │   │   └── user.js
-│   │   │
-│   │   └── routes/
-│   │       ├── appointment.routes.js
-│   │       ├── auth.route.js
-│   │       └── doctor.route.js
-│   │
-│   ├── .env
-│   ├── server.js
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   │   └── Navbar.jsx
-│   │   │
-│   │   ├── context/
-│   │   │   └── DoctorContext.jsx
-│   │   │
-│   │   ├── lib/
-│   │   │   ├── api.js
-│   │   │   └── axios.js
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Doctors.jsx
-│   │   │   ├── Doctorsdetail.jsx
-│   │   │   ├── BookAppointment.jsx
-│   │   │   ├── MyAppointments.jsx
-│   │   │   ├── Myprofile.jsx
-│   │   │   ├── Myprofdoc.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── SignUp.jsx
-│   │   │   └── Contact.jsx
-│   │   │
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   │
-│   ├── tailwind.config.js
-│   ├── vite.config.js
-│   └── package.json
-│
-└── README.md
+                React Frontend
+                      │
+                      │ REST APIs
+                      ▼
+              Express.js Backend
+          ┌───────────┼────────────┐
+          │           │            │
+          ▼           ▼            ▼
+     PostgreSQL     Redis      BullMQ Queue
+          │           │            │
+          │           │            ▼
+          │           │      Background Workers
+          │           │
+          ▼           ▼
+      Prisma ORM   Cache Layer
+
 ```
 
 ---
 
-## 🔐 Authentication & Security
-- JWT-based secure authentication
-- Password hashing using bcrypt
-- Protected routes with middleware
-- Role-based access (Doctor / Patient)
+# Backend Engineering Highlights
+
+This project demonstrates several scalable backend engineering concepts.
+
+## CQRS
+
+- Separate command and query responsibilities
+- Independent business logic organization
+- Improved maintainability
+
+## Saga Pattern
+
+- Multi-step appointment workflow
+- Distributed transaction management
+- Compensating actions on failure
+
+## Outbox Pattern
+
+- Reliable event publishing
+- Prevents lost asynchronous events
+
+## Redis Caching
+
+- Cache Aside Pattern
+- Cache Invalidation
+- Reduced database load
+- Faster API responses
+
+## Background Processing
+
+- BullMQ Queue
+- Producer-Consumer Pattern
+- Delayed Jobs
+- Retry Mechanism
+- Exponential Backoff
+- Dead Letter Queue
+
+## Reliability
+
+- Circuit Breaker
+- Idempotent APIs
+- Distributed Locking
+- Database Transactions
+- Connection Pooling
+- Token Bucket Rate Limiting
 
 ---
 
-## 💳 Razorpay Integration Flow
+# Project Structure
 
-1. Backend creates Razorpay order
-2. Frontend opens Razorpay checkout
-3. User completes payment
-4. Razorpay sends payment signature
-5. Backend verifies payment authenticity
-6. Appointment is confirmed
+```
+MediSlot
+│
+├── backend
+│   ├── prisma
+│   ├── src
+│   │   ├── commands
+│   │   ├── queries
+│   │   ├── controllers
+│   │   ├── middleware
+│   │   ├── workers
+│   │   ├── jobs
+│   │   ├── services
+│   │   ├── routes
+│   │   └── utils
+│   └── server.js
+│
+└── frontend
+    ├── src
+    ├── assets
+    └── public
+```
 
 ---
 
-## ⚙️ Installation & Setup
+# Installation
 
-### Prerequisites
-- Node.js (v16+)
-- MongoDB
+## Clone Repository
 
-### Clone Repository
 ```bash
-git clone https://github.com/your-username/medislot.git
-cd medislot
+git clone https://github.com/rajankumar2511/Med.git
 ```
 
-### Backend Setup
+---
+
+## Backend Setup
+
 ```bash
 cd backend
+
 npm install
-npm run dev
 ```
 
-Create `.env`
+Create a `.env` file and configure:
+
 ```
-PORT=4000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-RAZORPAY_KEY_ID=your_key
-RAZORPAY_KEY_SECRET=your_secret
+DATABASE_URL=
+
+REDIS_URL=
+
+JWT_SECRET_KEY=
+
+EMAIL=
+
+EMAIL_PASSWORD=
+
+COHERE_API_KEY=
+
+CLOUDINARY_NAME=
+
+CLOUDINARY_KEY=
+
+CLOUDINARY_SECRET=
+
+RAZORPAY_KEY_ID=
+
+RAZORPAY_SECRET=
 ```
 
-### Frontend Setup
+Run database migrations
+
+```bash
+npx prisma migrate deploy
+```
+
+Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+Start backend
+
+```bash
+npm start
+```
+
+---
+
+## Frontend Setup
+
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
 ---
 
-## 📈 Future Improvements
-- Admin analytics dashboard
-- Email/SMS appointment reminders
-- Video consultation
-- Prescription uploads
-- Refund handling via Razorpay
+# Environment Variables
+
+The application requires:
+
+| Variable | Description |
+|-----------|-------------|
+| DATABASE_URL | PostgreSQL Connection String |
+| REDIS_URL | Redis Connection |
+| JWT_SECRET_KEY | JWT Secret |
+| EMAIL | SMTP Email |
+| EMAIL_PASSWORD | SMTP Password |
+| COHERE_API_KEY | AI API Key |
+| CLOUDINARY_NAME | Cloudinary Cloud Name |
+| CLOUDINARY_KEY | Cloudinary API Key |
+| CLOUDINARY_SECRET | Cloudinary Secret |
+| RAZORPAY_KEY_ID | Payment Key |
+| RAZORPAY_SECRET | Payment Secret |
 
 ---
 
-## 📄 License
+# Performance Features
 
-MIT License
+- Redis Cache Layer
+- Background Queue Processing
+- Retry with Exponential Backoff
+- Dead Letter Queue
+- Connection Pooling
+- Distributed Locking
+- Rate Limiting
+- Optimized Database Queries
 
-Copyright (c) 2026 Medislot
+---
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software.
+# Security
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+- JWT Authentication
+- Password Hashing
+- Protected Routes
+- CORS Configuration
+- Environment Variables
+- Rate Limiting
+- Idempotent APIs
+
+---
+
+# Future Enhancements
+
+- Video Consultation
+- Real-time Notifications
+- WebSocket Integration
+- Appointment Analytics
+- Admin Dashboard
+- Docker Deployment
+- Kubernetes
+- CI/CD Pipeline
+- Monitoring & Observability
+
+---
+
+# Screenshots
+
+> Add screenshots of:
+>
+> - Home Page
+> - Doctor Listing
+> - Booking Page
+> - Patient Dashboard
+> - Doctor Dashboard
+> - AI Assistant
+> - Payment Page
+
+---
+
+# Live Demo
+
+Frontend
+
+```
+Coming Soon
+```
+
+Backend API
+
+```
+Coming Soon
+```
+
+---
+
+# Author
+
+**Rajan Kumar**
+
+- GitHub: https://github.com/rajankumar2511
+
+---
+
+# License
+
+This project is licensed under the MIT License.
+
+---
+
+## If you found this project useful, consider giving it a ⭐ on GitHub.
