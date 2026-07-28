@@ -5,10 +5,10 @@ import { hashPassword, comparePassword } from "../utils/password.js";
 /* 🔒 ONE COOKIE CONFIG (USED EVERYWHERE) */
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
-  secure: false, // true in production
+  sameSite: "none",
+  secure: true,
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 /* 🔐 PUBLIC ROLES ONLY */
