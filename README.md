@@ -221,19 +221,6 @@ This project demonstrates scalable backend engineering, distributed systems, and
 
 ---
 
-## 🚀 Features
-
-- Secure Authentication & Authorization
-- Doctor Appointment Booking
-- AI-powered Doctor Recommendation
-- Online Payment Integration
-- Appointment Confirmation & Reminder Emails
-- Doctor Availability Management
-- Admin Dashboard
-- Doctor Dashboard
-- Patient Dashboard
-
----
 
 # Project Structure
 
