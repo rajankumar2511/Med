@@ -102,44 +102,136 @@ The project focuses on building reliable, maintainable, and scalable backend ser
 
 # Backend Engineering Highlights
 
-This project demonstrates several scalable backend engineering concepts.
+This project demonstrates scalable backend engineering, distributed systems, and reliability patterns commonly used in production-grade applications.
 
-## CQRS
+---
 
-- Separate command and query responsibilities
-- Independent business logic organization
-- Improved maintainability
+## 🏗️ Architecture
 
+- CQRS (Command Query Responsibility Segregation)
+- Transactional Outbox Pattern
+- Event-Driven Architecture
+- RESTful API Design
+- Clean Architecture
 
-## Outbox Pattern
+---
 
-- Reliable event publishing
-- Prevents lost asynchronous events
+## 🗄️ Database & Concurrency
 
-## Redis Caching
+- PostgreSQL
+- Prisma ORM
+- Serializable Database Transactions
+- Connection Pooling
+- Idempotent APIs
+- Concurrency-safe Appointment Booking
 
-- Cache Aside Pattern
+> **Note:** Add **Distributed Locking** here only if your final implementation still uses Redis locks (`SET NX EX`).
+
+---
+
+## ⚡ Caching
+
+- Redis Cache
+- Cache-Aside Pattern
+- Cache Warming
 - Cache Invalidation
-- Reduced database load
-- Faster API responses
+- TTL-based Cache Eviction
 
-## Background Processing
+---
 
-- BullMQ Queue
-- Producer-Consumer Pattern
+## 🔄 Asynchronous Processing
+
+- BullMQ
+- Redis Queue
+- Producer–Consumer Pattern
+- Queue Workers
+- Background Jobs
 - Delayed Jobs
+- Job Scheduling
+
+---
+
+## 🛡️ Reliability & Fault Tolerance
+
 - Retry Mechanism
 - Exponential Backoff
-- Dead Letter Queue
-
-## Reliability
-
 - Circuit Breaker
+- Dead Letter Queue (DLQ)
+
+---
+
+## 🔐 Security
+
+- JWT Authentication
+- Role-Based Access Control (RBAC)
+- HMAC Payment Signature Verification
+- Password Hashing
+- Protected REST APIs
+
+---
+
+## 💳 Payments
+
+- Secure Razorpay Integration
+- HMAC Signature Verification
+- Atomic Payment Confirmation
+- Transactional Payment Workflow
+
+---
+
+## 🤖 AI Integration
+
+- LLM-powered Symptom Analysis
+- Intelligent Doctor Recommendation
+- AI-assisted Doctor Discovery
+
+---
+
+## 📧 Email System
+
+- Nodemailer
+- HTML Email Templates
+- Appointment Confirmation Emails
+- Appointment Reminder Emails
+- Asynchronous Email Delivery
+
+---
+
+## ☁️ Deployment
+
+- Vercel
+- Render
+- Neon PostgreSQL
+- Upstash Redis
+
+---
+
+## 📐 System Design Patterns
+
+- CQRS
+- Transactional Outbox Pattern
+- Event-Driven Architecture
+- Cache-Aside Pattern
+- Producer–Consumer Pattern
 - Idempotent APIs
-- Distributed Locking
-- Database Transactions
-- Connection Pooling
-- Token Bucket Rate Limiting
+- Retry with Exponential Backoff
+- Circuit Breaker
+- Dead Letter Queue (DLQ)
+- Serializable Transactions
+
+---
+
+## 🚀 Features
+
+- Secure Authentication & Authorization
+- Doctor Appointment Booking
+- AI-powered Doctor Recommendation
+- Online Payment Integration
+- Appointment Confirmation & Reminder Emails
+- Doctor Availability Management
+- Admin Dashboard
+- Doctor Dashboard
+- Patient Dashboard
 
 ---
 
