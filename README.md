@@ -9,7 +9,9 @@
 ![Redis](https://img.shields.io/badge/Redis-red)
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748)
 ![License](https://img.shields.io/badge/License-MIT-green)
+## 🔗 Live Demo
 
+🌐 **Live Application:** https://med-kappa-five.vercel.app/
 ## Overview
 
 MediSlot is a full-stack healthcare appointment booking platform designed with production-oriented backend architecture. It enables patients to discover doctors, book appointments, complete secure payments, and receive automated notifications while demonstrating scalable backend engineering concepts such as CQRS, Saga Pattern, Redis caching, BullMQ workers, and asynchronous workflows.
